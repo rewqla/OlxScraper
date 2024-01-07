@@ -1,26 +1,25 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
+const { sendMessage } = require('./messageSender');
 
 const searchCriteria = [
     {
         url: 'https://www.olx.ua/uk/hobbi-otdyh-i-sport/knigi-zhurnaly/q-%D1%87%D0%B5%D1%82%D0%B2%D0%B5%D1%80%D1%82%D0%B5-%D0%BA%D1%80%D0%B8%D0%BB%D0%BE/',
-        email: "desares526@gmail.com",
+        telegramUserId: 650512143,
         minPrice: 350,
         maxPrice: 525,
         tags: ["Четверте", "Крило", "Яррос"]
     },
     {
         url: 'https://www.olx.ua/uk/hobbi-otdyh-i-sport/knigi-zhurnaly/q-%D1%81%D1%82%D1%80%D0%B0%D1%85-%D0%BC%D1%83%D0%B4%D1%80%D0%B5%D1%86%D1%8F/',
-        email: "desares526@gmail.com",
+        telegramUserId: 650512143,
         minPrice: 350,
         maxPrice: 525,
         tags: ["Страх", "Мудреця", "Ротфусс"]
     },
 ];
 
-
-
-const scrapData = (url, minPrice, maxPrice, tags) => axios(url)
+const scrapData = (url, minPrice, maxPrice, tags, userId) => axios(url)
     .then(response => {
         const html = response.data;
         const $ = cheerio.load(html, { decodeEntities: false });
@@ -46,13 +45,14 @@ const scrapData = (url, minPrice, maxPrice, tags) => axios(url)
             }
         });
 
-        if (goodsData != [])
-            console.log(goodsData);
+        if (goodsData.length > 0) {
+            sendMessage(userId, goodsData[0].name);
+        }
         else
             console.log("Nothing matches your criteria")
     })
     .catch(console.error);
 
 searchCriteria.forEach((item) => {
-    scrapData(item.url, item.minPrice, item.maxPrice, item.tags)
+    scrapData(item.url, item.minPrice, item.maxPrice, item.tags, item.telegramUserId)
 });
