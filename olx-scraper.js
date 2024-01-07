@@ -1,6 +1,6 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
-const { sendMessage } = require('./messageSender');
+const { sendMessage, startBot, stopBot } = require('./messageSender');
 
 const searchCriteria = [
     {
@@ -30,6 +30,8 @@ const scrapData = (url, minPrice, maxPrice, tags, userId) => axios(url)
             const name = $(this).find('a > div > div > div > div.css-u2ayx9 > h6').text();
             const priceMatch = $(this).find('a > div > div > div > div.css-u2ayx9 > p').text().match(/((\d )?\d{2,3} грн)/);
             const price = priceMatch ? priceMatch[0].replace(/[^\d]/g, '') : '';
+
+            const link = "https://www.olx.ua/" + $(this).find('a ').attr('href');
             const condition = $(this).find('a > div > div > div > div.css-iqvdlb > span > span > span').text();
             const [location, date] = $(this).find('a > div > div > div > div.css-odp1qd > p').text().split(' - ');
 
@@ -39,6 +41,7 @@ const scrapData = (url, minPrice, maxPrice, tags, userId) => axios(url)
                     name,
                     price,
                     condition,
+                    link,
                     location,
                     date,
                 });
@@ -46,13 +49,31 @@ const scrapData = (url, minPrice, maxPrice, tags, userId) => axios(url)
         });
 
         if (goodsData.length > 0) {
-            sendMessage(userId, goodsData[0].name);
+            let message = "З'явились нові оголошення за вашим запитом";
+            goodsData.forEach((item, index) => {
+                message += `\n${index + 1}) ${item.name} стан ${item.condition} за ціною ${item.price} о ${item.date} \nОзнайомитися з ним можливо за посиланням ${item.link}`;
+            });
+            console.log(goodsData)
+            sendMessage(userId, message);
         }
         else
             console.log("Nothing matches your criteria")
     })
     .catch(console.error);
 
-searchCriteria.forEach((item) => {
-    scrapData(item.url, item.minPrice, item.maxPrice, item.tags, item.telegramUserId)
-});
+startBot();
+
+
+const runScrapData = async () => {
+    while (true) {
+        for (const criteriaItem of searchCriteria) {
+            await scrapData(criteriaItem.url, criteriaItem.minPrice, criteriaItem.maxPrice, criteriaItem.tags, criteriaItem.telegramUserId);
+        }
+        await new Promise(resolve => setTimeout(resolve, 30000));
+        // await new Promise(resolve => setTimeout(resolve, 900000));
+    }
+};
+
+runScrapData();
+
+stopBot();
