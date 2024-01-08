@@ -42,7 +42,7 @@ const searchCriteria = [
         url: 'https://www.olx.ua/uk/hobbi-otdyh-i-sport/knigi-zhurnaly/q-%D1%8F-%D0%B1%D0%B0%D1%87%D1%83-%D0%B2%D0%B0%D1%81-%D1%86%D1%96%D0%BA%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-%D0%BF%D1%96%D1%82%D1%8C%D0%BC%D0%B0/?currency=UAH&search%5Border%5D=created_at:desc',
         telegramUserId: 650512143,
         minPrice: 350,
-        maxPrice: 450,
+        maxPrice: 430,
         tags: ["Я", "бачу", "цікавить", "пітьма", "Ілларіон", "Павлюк"]
     },
     {
@@ -171,7 +171,7 @@ const scrapDataAndUpdateResults = async (url, minPrice, maxPrice, tags, userId) 
 
                 previousResults[userId][url] = userResults;
             } else {
-                console.log(`Nothing new. Skipping message... ${newGoodsData[0].name} ${goodsData.length}`);
+                console.log(`Nothing new. Skipping message... ${userResults[0].name} ${userResults.length}`);
             }
         }
         else
