@@ -4,27 +4,61 @@ const { sendMessage, startBot, stopBot } = require('./messageSender');
 
 const searchCriteria = [
     {
-        url: 'https://www.olx.ua/uk/hobbi-otdyh-i-sport/knigi-zhurnaly/q-%D1%87%D0%B5%D1%82%D0%B2%D0%B5%D1%80%D1%82%D0%B5-%D0%BA%D1%80%D0%B8%D0%BB%D0%BE/',
+        url: 'https://www.olx.ua/uk/hobbi-otdyh-i-sport/knigi-zhurnaly/q-%D1%87%D0%B5%D1%82%D0%B2%D0%B5%D1%80%D1%82%D0%B5-%D0%BA%D1%80%D0%B8%D0%BB%D0%BE/?currency=UAH&search%5Border%5D=created_at:desc',
         telegramUserId: 650512143,
         minPrice: 350,
-        maxPrice: 600,
+        maxPrice: 700,
         tags: ["Четверте", "крило", "Яррос"]
     },
     {
-        url: 'https://www.olx.ua/uk/hobbi-otdyh-i-sport/knigi-zhurnaly/q-%D1%81%D1%82%D1%80%D0%B0%D1%85-%D0%BC%D1%83%D0%B4%D1%80%D0%B5%D1%86%D1%8F/',
+        url: 'https://www.olx.ua/uk/hobbi-otdyh-i-sport/knigi-zhurnaly/q-%D1%81%D1%82%D1%80%D0%B0%D1%85-%D0%BC%D1%83%D0%B4%D1%80%D0%B5%D1%86%D1%8F/?currency=UAH&search%5Border%5D=created_at:desc',
         telegramUserId: 650512143,
         minPrice: 350,
-        maxPrice: 600,
+        maxPrice: 700,
         tags: ["Страх", "Страхи", "мудреця", "Ротфусс"]
     },
     {
-        url: 'https://www.olx.ua/uk/hobbi-otdyh-i-sport/knigi-zhurnaly/q-%D0%B2%D0%B1%D0%B8%D0%B2%D1%81%D1%82%D0%B2%D0%BE-%D1%83-%D1%81%D1%85%D1%96%D0%B4%D0%BD%D0%BE%D0%BC%D1%83-%D0%B5%D0%BA%D1%81%D0%BF%D1%80%D0%B5%D1%81%D1%96/?currency=UAH&search%5Border%5D=created_at:desc',
+        url: 'https://www.olx.ua/uk/hobbi-otdyh-i-sport/knigi-zhurnaly/q-%D0%B2%D0%B1%D0%B8%D0%B2%D1%81%D1%82%D0%B2%D0%BE-%D1%83-%D1%81%D1%85%D1%96%D0%B4%D0%BD%D0%BE%D0%BC%D1%83-%D0%B5%D0%BA%D1%81%D0%BF%D1%80%D0%B5%D1%81%D1%96/?currency=UAH&search%5Border%5D=created_at%3Adesc',
         telegramUserId: 650512143,
         minPrice: 150,
-        maxPrice: 200,
-        tags: ["Вбивство", "східному", "експресі", "Крісті"]
+        maxPrice: 230,
+        tags: ["Вбивство", "східному", "експресі", "Агата", "Аґата", "Крісті"]
     },
-
+    {
+        url: 'https://www.olx.ua/uk/list/q-%D0%A1%D0%BC%D0%B5%D1%80%D1%82%D1%8C-%D0%BD%D0%B0-%D0%9D%D1%96%D0%BB%D1%96/?search%5Border%5D=created_at:desc#821125949',
+        telegramUserId: 650512143,
+        minPrice: 150,
+        maxPrice: 260,
+        tags: ["Смерть", "Нілі", "Агата", "Аґата", "Крісті"]
+    },
+    {
+        url: 'https://www.olx.ua/uk/list/q-%D0%A3%D0%B1%D0%B8%D0%B2%D1%81%D1%82%D0%B2%D0%B0-%D0%B7%D0%B0-%D0%B0%D0%B1%D0%B5%D1%82%D0%BA%D0%BE%D1%8E/?search%5Border%5D=created_at:desc',
+        telegramUserId: 650512143,
+        minPrice: 150,
+        maxPrice: 240,
+        tags: ["Убивства", "абеткою", "Агата", "Крісті"]
+    },
+    {
+        url: 'https://www.olx.ua/uk/hobbi-otdyh-i-sport/knigi-zhurnaly/q-%D1%8F-%D0%B1%D0%B0%D1%87%D1%83-%D0%B2%D0%B0%D1%81-%D1%86%D1%96%D0%BA%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-%D0%BF%D1%96%D1%82%D1%8C%D0%BC%D0%B0/?currency=UAH&search%5Border%5D=created_at:desc',
+        telegramUserId: 650512143,
+        minPrice: 350,
+        maxPrice: 450,
+        tags: ["Я", "бачу", "цікавить", "пітьма", "Ілларіон", "Павлюк"]
+    },
+    {
+        url: 'https://www.olx.ua/uk/hobbi-otdyh-i-sport/knigi-zhurnaly/q-%D0%92%D0%B5%D1%87%D1%96%D1%80%D0%BA%D0%B0-%D0%BD%D0%B0-%D0%93%D0%B5%D0%BB%D0%BB%D0%BE%D0%B2%D1%96%D0%BD/?currency=UAH&search%5Border%5D=created_at:desc',
+        telegramUserId: 650512143,
+        minPrice: 150,
+        maxPrice: 230,
+        tags: ["Вечірка", "Гелловін", "Привиди", "Венеції", "Агата", "Аґата", "Крісті"]
+    },
+    {
+        url: 'https://www.olx.ua/uk/hobbi-otdyh-i-sport/knigi-zhurnaly/q-%D1%82%D0%B0%D0%BD%D1%86%D1%96-%D0%B7-%D0%BA%D1%96%D1%81%D1%82%D0%BA%D0%B0%D0%BC%D0%B8/?currency=UAH&search%5Border%5D=created_at:desc',
+        telegramUserId: 650512143,
+        minPrice: 200,
+        maxPrice: 280,
+        tags: ["Танці", "кістками", "Андрій ", "Семʼянків"]
+    },
 ];
 
 let previousResults = {};
@@ -57,12 +91,52 @@ const scrapeItemData = ($item, tags, minPrice, maxPrice) => {
     return null;
 };
 
-let updatedIndex, newIndex;
 const generateMessageText = (item, index) => {
     let message = `\n${index}) ${item.name} стан ${item.condition} за ціною ${item.price} грн о ${item.date} \nОзнайомитися з ним можливо за посиланням ${item.link}`;
 
     return message;
 }
+
+const updateResultsArray = (userResults, newGoodsData) => {
+    let updatedIndex = newIndex = 1;
+
+    let newGoodsMessage = "";
+    let updatedGoodsMessage = "";
+
+    newGoodsData.forEach(item => {
+        const userItemIndex = userResults.findIndex(userItem => userItem.id === item.id);
+
+        if (userItemIndex !== -1) {
+            updatedGoodsMessage += generateMessageText(item, updatedIndex, true);
+            updatedIndex++;
+
+            userResults[userItemIndex] = item;
+        } else {
+            newGoodsMessage += generateMessageText(item, newIndex, false);
+            newIndex++;
+
+            userResults.push(item);
+        }
+    });
+
+    return { newGoodsMessage, updatedGoodsMessage };
+};
+
+const sendMessages = (userId, newGoodsMessage, updatedGoodsMessage, bookName, count) => {
+    if (newGoodsMessage) {
+        newGoodsMessage = "Оголошення було оновлено:\n" + newGoodsMessage;
+        sendMessage(userId, newGoodsMessage);
+
+        console.log(`Sending new goods message... ${bookName} ${count}`);
+    }
+
+    if (updatedGoodsMessage) {
+        updatedGoodsMessage = "З'явились нові оголошення:\n" + updatedGoodsMessage;
+        sendMessage(userId, updatedGoodsMessage);
+
+        console.log(`Sending updated goods message... ${bookName} ${count}`);
+    }
+};
 
 const scrapDataAndUpdateResults = async (url, minPrice, maxPrice, tags, userId) => {
     try {
@@ -92,43 +166,12 @@ const scrapDataAndUpdateResults = async (url, minPrice, maxPrice, tags, userId) 
             });
 
             if (newGoodsData.length > 0) {
-                let newGoodsMessage = "";
-                let updatedGoodsMessage = "";
-                updatedIndex = newIndex = 1;
-
-                newGoodsData.forEach((item) => {
-                    const userItemIndex = userResults.findIndex(userItem => userItem.id === item.id);
-
-                    if (userItemIndex !== -1) {
-                        updatedGoodsMessage += generateMessageText(item, updatedIndex, true);
-                        updatedIndex++;
-
-                        userResults[userItemIndex] = item;
-                    } else {
-                        newGoodsMessage += generateMessageText(item, newIndex, false);
-                        newIndex++;
-
-                        userResults.push(item);
-                    }
-                });
-
-                if (newGoodsMessage) {
-                    newGoodsMessage = "Оголошення було оновлено:\n" + newGoodsMessage;
-                    sendMessage(userId, newGoodsMessage);
-
-                    console.log("Sending new goods message... " + newGoodsData[0].name + " " + newGoodsData.length);
-                }
-
-                if (updatedGoodsMessage) {
-                    updatedGoodsMessage = "З'явились нові оголошення:\n" + updatedGoodsMessage;
-                    sendMessage(userId, updatedGoodsMessage);
-
-                    console.log("Sending updated goods message..." + newGoodsData[0].name + " " + newGoodsData.length);
-                }
+                const { newGoodsMessage, updatedGoodsMessage } = updateResultsArray(userResults, newGoodsData);
+                sendMessages(userId, newGoodsMessage, updatedGoodsMessage, newGoodsData[0].name, goodsData.length);
 
                 previousResults[userId][url] = userResults;
             } else {
-                console.log("Nothing new. Skipping message... " + goodsData.length);
+                console.log(`Nothing new. Skipping message... ${newGoodsData[0].name} ${goodsData.length}`);
             }
         }
         else
@@ -140,15 +183,13 @@ const scrapDataAndUpdateResults = async (url, minPrice, maxPrice, tags, userId) 
 
 startBot();
 
-
 const runScrapData = async () => {
     while (true) {
         for (const criteriaItem of searchCriteria) {
             await scrapDataAndUpdateResults(criteriaItem.url, criteriaItem.minPrice, criteriaItem.maxPrice, criteriaItem.tags, criteriaItem.telegramUserId);
         }
-        await new Promise(resolve => setTimeout(resolve, 15000));
-        // await new Promise(resolve => setTimeout(resolve, 600000));
-        // await new Promise(resolve => setTimeout(resolve, 900000));
+        // await new Promise(resolve => setTimeout(resolve, 15000));
+        await new Promise(resolve => setTimeout(resolve, 900000));
     }
 };
 
