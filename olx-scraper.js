@@ -124,14 +124,14 @@ const updateResultsArray = (userResults, newGoodsData) => {
 
 const sendMessages = (userId, newGoodsMessage, updatedGoodsMessage, bookName, count) => {
     if (newGoodsMessage) {
-        newGoodsMessage = "Оголошення було оновлено:\n" + newGoodsMessage;
+        newGoodsMessage = "З'явились нові оголошення:\n" + newGoodsMessage;
         sendMessage(userId, newGoodsMessage);
 
         console.log(`Sending new goods message... ${bookName} ${count}`);
     }
 
     if (updatedGoodsMessage) {
-        updatedGoodsMessage = "З'явились нові оголошення:\n" + updatedGoodsMessage;
+        updatedGoodsMessage = "Оголошення було оновлено:\n" + updatedGoodsMessage;
         sendMessage(userId, updatedGoodsMessage);
 
         console.log(`Sending updated goods message... ${bookName} ${count}`);
@@ -189,7 +189,9 @@ const runScrapData = async () => {
             await scrapDataAndUpdateResults(criteriaItem.url, criteriaItem.minPrice, criteriaItem.maxPrice, criteriaItem.tags, criteriaItem.telegramUserId);
         }
         // await new Promise(resolve => setTimeout(resolve, 15000));
-        await new Promise(resolve => setTimeout(resolve, 900000));
+        console.log("--------------------------------------------------")
+        await new Promise(resolve => setTimeout(resolve, 600000));
+        sendMessage(userId, "End of the cycle");
     }
 };
 
