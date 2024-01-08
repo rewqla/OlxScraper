@@ -8,21 +8,21 @@ const searchCriteria = [
         telegramUserId: 650512143,
         minPrice: 350,
         maxPrice: 600,
-        tags: ["Четверте", "Крило", "Яррос"]
+        tags: ["Четверте", "крило", "Яррос"]
     },
     {
         url: 'https://www.olx.ua/uk/hobbi-otdyh-i-sport/knigi-zhurnaly/q-%D1%81%D1%82%D1%80%D0%B0%D1%85-%D0%BC%D1%83%D0%B4%D1%80%D0%B5%D1%86%D1%8F/',
         telegramUserId: 650512143,
         minPrice: 350,
         maxPrice: 600,
-        tags: ["Страх", "Мудреця", "Ротфусс"]
+        tags: ["Страх", "Страхи", "мудреця", "Ротфусс"]
     },
     {
         url: 'https://www.olx.ua/uk/hobbi-otdyh-i-sport/knigi-zhurnaly/q-%D0%B2%D0%B1%D0%B8%D0%B2%D1%81%D1%82%D0%B2%D0%BE-%D1%83-%D1%81%D1%85%D1%96%D0%B4%D0%BD%D0%BE%D0%BC%D1%83-%D0%B5%D0%BA%D1%81%D0%BF%D1%80%D0%B5%D1%81%D1%96/?currency=UAH&search%5Border%5D=created_at:desc',
         telegramUserId: 650512143,
         minPrice: 150,
         maxPrice: 200,
-        tags: ["Вбивство", "Східному", "Експресі", "Крісті"]
+        tags: ["Вбивство", "східному", "експресі", "Крісті"]
     },
 
 ];
@@ -57,18 +57,16 @@ const scrapeItemData = ($item, tags, minPrice, maxPrice) => {
     return null;
 };
 
-function generateMessageText(goodsData) {
-    let message = "З'явились нові оголошення за вашим запитом\n";
-
-    goodsData.forEach((item, index) => {
-        message += `\n${index + 1}) ${item.name} стан ${item.condition} за ціною ${item.price} грн о ${item.date} \nОзнайомитися з ним можливо за посиланням ${item.link}`;
-    });
+let updatedIndex, newIndex;
+const generateMessageText = (item, index) => {
+    let message = `\n${index}) ${item.name} стан ${item.condition} за ціною ${item.price} грн о ${item.date} \nОзнайомитися з ним можливо за посиланням ${item.link}`;
 
     return message;
 }
 
-const scrapDataAndUpdateResults = (url, minPrice, maxPrice, tags, userId) => axios(url)
-    .then(response => {
+const scrapDataAndUpdateResults = async (url, minPrice, maxPrice, tags, userId) => {
+    try {
+        const response = await axios(url);
         const html = response.data;
         const $ = cheerio.load(html, { decodeEntities: false });
         const gridContainer = $('div[data-cy="l-card"]');
@@ -84,40 +82,49 @@ const scrapDataAndUpdateResults = (url, minPrice, maxPrice, tags, userId) => axi
         });
 
         if (goodsData.length > 0) {
-            if (!previousResults[userId]) {
-                previousResults[userId] = {};
-            }
-
-            if (!previousResults[userId][url]) {
-                previousResults[userId][url] = [];
-            }
+            previousResults[userId] = previousResults[userId] || {};
+            previousResults[userId][url] = previousResults[userId][url] || [];
 
             const userResults = previousResults[userId][url];
             const newGoodsData = goodsData.filter(item => {
                 const userItemIndex = userResults.findIndex(userItem => userItem.id === item.id);
-                if (userItemIndex !== -1) {
-                    if (!areResultsEqual(userResults[userItemIndex], item))
-                        return item;
-                } else {
-                    return item;
-                }
+                return (userItemIndex !== -1) ? !areResultsEqual(userResults[userItemIndex], item) : true;
             });
 
             if (newGoodsData.length > 0) {
-                const message = generateMessageText(newGoodsData);
-                sendMessage(userId, message);
+                let newGoodsMessage = "";
+                let updatedGoodsMessage = "";
+                updatedIndex = newIndex = 1;
 
-                console.log("Sending new message... " + goodsData[0].name + " " + goodsData.length);
-
-                newGoodsData.forEach(item => {
+                newGoodsData.forEach((item) => {
                     const userItemIndex = userResults.findIndex(userItem => userItem.id === item.id);
 
                     if (userItemIndex !== -1) {
+                        updatedGoodsMessage += generateMessageText(item, updatedIndex, true);
+                        updatedIndex++;
+
                         userResults[userItemIndex] = item;
                     } else {
+                        newGoodsMessage += generateMessageText(item, newIndex, false);
+                        newIndex++;
+
                         userResults.push(item);
                     }
-                })
+                });
+
+                if (newGoodsMessage) {
+                    newGoodsMessage = "Оголошення було оновлено:\n" + newGoodsMessage;
+                    sendMessage(userId, newGoodsMessage);
+
+                    console.log("Sending new goods message... " + newGoodsData[0].name + " " + newGoodsData.length);
+                }
+
+                if (updatedGoodsMessage) {
+                    updatedGoodsMessage = "З'явились нові оголошення:\n" + updatedGoodsMessage;
+                    sendMessage(userId, updatedGoodsMessage);
+
+                    console.log("Sending updated goods message..." + newGoodsData[0].name + " " + newGoodsData.length);
+                }
 
                 previousResults[userId][url] = userResults;
             } else {
@@ -126,8 +133,10 @@ const scrapDataAndUpdateResults = (url, minPrice, maxPrice, tags, userId) => axi
         }
         else
             console.log("Nothing matches your criteria")
-    })
-    .catch(console.error);
+    } catch (error) {
+        console.error(error);
+    }
+};
 
 startBot();
 
@@ -137,8 +146,8 @@ const runScrapData = async () => {
         for (const criteriaItem of searchCriteria) {
             await scrapDataAndUpdateResults(criteriaItem.url, criteriaItem.minPrice, criteriaItem.maxPrice, criteriaItem.tags, criteriaItem.telegramUserId);
         }
-        // await new Promise(resolve => setTimeout(resolve, 15000));
-        await new Promise(resolve => setTimeout(resolve, 600000));
+        await new Promise(resolve => setTimeout(resolve, 15000));
+        // await new Promise(resolve => setTimeout(resolve, 600000));
         // await new Promise(resolve => setTimeout(resolve, 900000));
     }
 };
