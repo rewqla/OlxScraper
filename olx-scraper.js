@@ -183,15 +183,28 @@ const scrapDataAndUpdateResults = async (url, minPrice, maxPrice, tags, userId) 
 
 startBot();
 
+const getTime = () => {
+    const currentTime = new Date();
+
+    const year = currentTime.getFullYear();
+    const month = currentTime.getMonth() + 1;
+    const day = currentTime.getDate();
+    const hours = currentTime.getHours();
+    const minutes = currentTime.getMinutes();
+    const seconds = currentTime.getSeconds();
+
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
 const runScrapData = async () => {
     while (true) {
         for (const criteriaItem of searchCriteria) {
             await scrapDataAndUpdateResults(criteriaItem.url, criteriaItem.minPrice, criteriaItem.maxPrice, criteriaItem.tags, criteriaItem.telegramUserId);
         }
         // await new Promise(resolve => setTimeout(resolve, 15000));
-        console.log("--------------------------------------------------")
+        console.log(`------------------------${getTime()}--------------------------`)
+        sendMessage(650512143, "End of the cycle at " + getTime());
         await new Promise(resolve => setTimeout(resolve, 600000));
-        sendMessage(userId, "End of the cycle");
     }
 };
 
