@@ -204,7 +204,7 @@ const runScrapData = async () => {
         // await new Promise(resolve => setTimeout(resolve, 15000));
         console.log(`------------------------${getTime()}--------------------------`)
         sendMessage(650512143, "End of the cycle at " + getTime());
-        await new Promise(resolve => setTimeout(resolve, 600000));
+        await new Promise(resolve => setTimeout(resolve, 300000));
     }
 };
 
