@@ -21,7 +21,7 @@ const searchCriteria = [
         url: 'https://www.olx.ua/uk/hobbi-otdyh-i-sport/knigi-zhurnaly/q-%D0%B2%D0%B1%D0%B8%D0%B2%D1%81%D1%82%D0%B2%D0%BE-%D1%83-%D1%81%D1%85%D1%96%D0%B4%D0%BD%D0%BE%D0%BC%D1%83-%D0%B5%D0%BA%D1%81%D0%BF%D1%80%D0%B5%D1%81%D1%96/?currency=UAH&search%5Border%5D=created_at%3Adesc',
         telegramUserId: 650512143,
         minPrice: 150,
-        maxPrice: 230,
+        maxPrice: 210,
         tags: ["Вбивство", "східному", "експресі", "Агата", "Аґата", "Крісті"]
     },
     {
@@ -181,8 +181,6 @@ const scrapDataAndUpdateResults = async (url, minPrice, maxPrice, tags, userId) 
     }
 };
 
-startBot();
-
 const getTime = () => {
     const currentTime = new Date();
 
@@ -196,14 +194,32 @@ const getTime = () => {
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
+const pingService = async () => {
+    const pingUrl = 'http://localhost:3000/ping';
+    // const pingUrl = 'https://olx-scraper-notifier.onrender.com/ping';
+
+    try {
+        const response = await axios.get(pingUrl);
+        console.log(`Ping response: ${response.data}`);
+    } catch (error) {
+        console.error(`Error pinging the service: ${error.message}`);
+    }
+};
+
+require('./index.js');
+startBot();
+
 const runScrapData = async () => {
     while (true) {
         for (const criteriaItem of searchCriteria) {
             await scrapDataAndUpdateResults(criteriaItem.url, criteriaItem.minPrice, criteriaItem.maxPrice, criteriaItem.tags, criteriaItem.telegramUserId);
         }
-        // await new Promise(resolve => setTimeout(resolve, 15000));
+
         console.log(`------------------------${getTime()}--------------------------`)
-        sendMessage(650512143, "End of the cycle at " + getTime());
+
+        await pingService();
+        // sendMessage(650512143, "End of the cycle at " + getTime());
+
         await new Promise(resolve => setTimeout(resolve, 600000));
     }
 };
