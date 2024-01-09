@@ -195,8 +195,7 @@ const getTime = () => {
 }
 
 const pingService = async () => {
-    const pingUrl = 'http://localhost:3000/ping';
-    // const pingUrl = 'https://olx-scraper-notifier.onrender.com/ping';
+    const pingUrl = 'https://olx-scraper-notifier.onrender.com/ping';
 
     try {
         const response = await axios.get(pingUrl);
